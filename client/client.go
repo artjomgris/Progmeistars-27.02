@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	conn, err := net.Dial("udp", "localhost:5000")
+	conn, err := net.Dial("udp", "localhost:12400")
 	if err != nil {
 		fmt.Println(err)
 		return

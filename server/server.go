@@ -11,7 +11,7 @@ import (
 var layout = "2006-01-02T15:04:05.000Z"
 
 func main() {
-	adr, err := net.ResolveUDPAddr("udp", "localhost:5000")
+	adr, err := net.ResolveUDPAddr("udp", "localhost:12400")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -30,7 +30,7 @@ func main() {
 }
 
 func handleConnection(con *net.UDPConn) {
-	buf := make([]byte, 3000)
+	buf := make([]byte, 2000)
 	n, err := con.Read(buf)
 	if err != nil {
 		fmt.Println(err)
