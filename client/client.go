@@ -18,12 +18,12 @@ func main() {
 	var data struct {
 		X    int32
 		Y    int32
-		Time []byte
+		Time []uint8
 	}
 
 	data.X = 1
 	data.Y = 2
-	data.Time = []byte(time.Now().String())
+	data.Time = []uint8(time.Now().String())
 
 	var buf bytes.Buffer
 	err = binary.Write(&buf, binary.LittleEndian, data)

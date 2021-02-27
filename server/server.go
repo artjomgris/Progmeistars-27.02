@@ -30,7 +30,7 @@ func main() {
 }
 
 func handleConnection(con *net.UDPConn) {
-	buf := make([]byte, 2000)
+	buf := make([]byte, 10000)
 	n, err := con.Read(buf)
 	if err != nil {
 		fmt.Println(err)
@@ -41,7 +41,7 @@ func handleConnection(con *net.UDPConn) {
 	var data struct {
 		X    int32
 		Y    int32
-		Time []byte
+		Time []uint8
 	}
 
 	err = binary.Read(buff, binary.LittleEndian, &data)
