@@ -5,33 +5,34 @@ import (
 	"encoding/binary"
 	"fmt"
 	"net"
-	"time"
 )
 
 func main() {
-	conn, err := net.Dial("udp", "localhost:12400")
+	conn, err := net.Dial("udp", "localhost:5000")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
+	defer conn.Close()
 
 	var data struct {
-		X    int32
-		Y    int32
-		Time []uint8
+		X int32
+		Y int32
+		N int32
 	}
 
-	data.X = 1
-	data.Y = 2
-	data.Time = []uint8(time.Now().String())
-
-	var buf bytes.Buffer
-	err = binary.Write(&buf, binary.LittleEndian, data)
-
-	_, err = conn.Write(buf.Bytes())
-	if err != nil {
-		fmt.Println(err)
-		return
+	var i int32 = 0
+	for ; i < 10; i++ {
+		data.X = i
+		data.Y = i
+		data.N = i
+		var buf bytes.Buffer
+		err = binary.Write(&buf, binary.LittleEndian, data)
+		_, err = conn.Write(buf.Bytes())
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Println(data)
 	}
-	conn.Close()
 }
