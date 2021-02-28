@@ -8,8 +8,6 @@ import (
 	"net"
 )
 
-var layout = "2006-01-02T15:04:05.000Z"
-
 type point struct {
 	X int32
 	Y int32
@@ -31,13 +29,19 @@ func main() {
 	var n int32 = 0
 	ch := make(chan point)
 	var p point
-	termbox.Init()
+	err = termbox.Init()
+	if err != nil {
+		panic(err)
+	}
 	defer termbox.Close()
 	for {
 		go handleConnection(listener, ch)
 		p = <-ch
 		if p.N >= n {
-			termbox.Clear(termbox.ColorWhite, termbox.ColorBlack)
+			err = termbox.Clear(termbox.ColorWhite, termbox.ColorBlack)
+			if err != nil {
+				panic(err)
+			}
 			termbox.SetCell(int(p.X), int(p.Y), '*', termbox.ColorRed, termbox.ColorBlack)
 			termbox.SetCell(int(p.X-1), int(p.Y), '*', termbox.ColorGreen, termbox.ColorBlack)
 			termbox.SetCell(int(p.X+1), int(p.Y), '*', termbox.ColorGreen, termbox.ColorBlack)
@@ -47,7 +51,10 @@ func main() {
 			termbox.SetCell(int(p.X-1), int(p.Y+1), '*', termbox.ColorWhite, termbox.ColorBlack)
 			termbox.SetCell(int(p.X+1), int(p.Y-1), '*', termbox.ColorWhite, termbox.ColorBlack)
 			termbox.SetCell(int(p.X-1), int(p.Y-1), '*', termbox.ColorWhite, termbox.ColorBlack)
-			termbox.Flush()
+			err = termbox.Flush()
+			if err != nil {
+				panic(err)
+			}
 			n++
 		}
 
