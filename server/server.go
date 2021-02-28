@@ -38,10 +38,7 @@ func main() {
 		go handleConnection(listener, ch)
 		p = <-ch
 		if p.N >= n {
-			err = termbox.Clear(termbox.ColorWhite, termbox.ColorBlack)
-			if err != nil {
-				panic(err)
-			}
+			termbox.Clear(termbox.ColorWhite, termbox.ColorBlack)
 			termbox.SetCell(int(p.X), int(p.Y), '*', termbox.ColorRed, termbox.ColorBlack)
 			termbox.SetCell(int(p.X-1), int(p.Y), '*', termbox.ColorGreen, termbox.ColorBlack)
 			termbox.SetCell(int(p.X+1), int(p.Y), '*', termbox.ColorGreen, termbox.ColorBlack)
@@ -51,10 +48,7 @@ func main() {
 			termbox.SetCell(int(p.X-1), int(p.Y+1), '*', termbox.ColorWhite, termbox.ColorBlack)
 			termbox.SetCell(int(p.X+1), int(p.Y-1), '*', termbox.ColorWhite, termbox.ColorBlack)
 			termbox.SetCell(int(p.X-1), int(p.Y-1), '*', termbox.ColorWhite, termbox.ColorBlack)
-			err = termbox.Flush()
-			if err != nil {
-				panic(err)
-			}
+			termbox.Flush()
 			n++
 		}
 
