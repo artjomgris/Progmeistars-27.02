@@ -22,7 +22,8 @@ func main() {
 	}
 
 	var i int32 = 0
-	for ; i < 10; i++ {
+	var j int32 = 12
+	for ; i <= 12; i++ {
 		data.X = i
 		data.Y = i
 		data.N = i
@@ -34,5 +35,20 @@ func main() {
 			return
 		}
 		fmt.Println(data)
+	}
+	i -= 2
+	for ; i >= 1; i-- {
+		data.X = 12 + (12 - i)
+		data.Y = i
+		data.N = j
+		var buf bytes.Buffer
+		err = binary.Write(&buf, binary.LittleEndian, data)
+		_, err = conn.Write(buf.Bytes())
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Println(data)
+		j++
 	}
 }

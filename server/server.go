@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
+	"github.com/nsf/termbox-go"
 	"net"
-	"time"
 )
 
 var layout = "2006-01-02T15:04:05.000Z"
@@ -28,18 +28,29 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	//var n int32 = 0
-	var ch chan point
-	//termbox.Init()
-	//	defer termbox.Close()
+	var n int32 = 0
+	ch := make(chan point)
+	var p point
+	termbox.Init()
+	defer termbox.Close()
 	for {
-		//termbox.Clear(termbox.ColorWhite, termbox.ColorBlack)
-		handleConnection(listener, ch)
-		p := <-ch
-		//termbox.SetCell(int(p.X), int(p.Y), '*', termbox.ColorRed, termbox.ColorWhite)
-		fmt.Println(p)
-		//termbox.Flush()
-		time.Sleep(2 * time.Second)
+		go handleConnection(listener, ch)
+		p = <-ch
+		if p.N >= n {
+			termbox.Clear(termbox.ColorWhite, termbox.ColorBlack)
+			termbox.SetCell(int(p.X), int(p.Y), '*', termbox.ColorRed, termbox.ColorBlack)
+			termbox.SetCell(int(p.X-1), int(p.Y), '*', termbox.ColorGreen, termbox.ColorBlack)
+			termbox.SetCell(int(p.X+1), int(p.Y), '*', termbox.ColorGreen, termbox.ColorBlack)
+			termbox.SetCell(int(p.X), int(p.Y+1), '*', termbox.ColorGreen, termbox.ColorBlack)
+			termbox.SetCell(int(p.X), int(p.Y-1), '*', termbox.ColorGreen, termbox.ColorBlack)
+			termbox.SetCell(int(p.X+1), int(p.Y+1), '*', termbox.ColorWhite, termbox.ColorBlack)
+			termbox.SetCell(int(p.X-1), int(p.Y+1), '*', termbox.ColorWhite, termbox.ColorBlack)
+			termbox.SetCell(int(p.X+1), int(p.Y-1), '*', termbox.ColorWhite, termbox.ColorBlack)
+			termbox.SetCell(int(p.X-1), int(p.Y-1), '*', termbox.ColorWhite, termbox.ColorBlack)
+			termbox.Flush()
+			n++
+		}
+
 	}
 
 }
