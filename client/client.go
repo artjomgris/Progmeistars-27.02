@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	conn, err := net.Dial("udp", "localhost:5000")
+	conn, err := net.Dial("udp", "127.0.0.1:5000")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -50,5 +50,19 @@ func main() {
 		}
 		fmt.Println(data)
 		j++
+	}
+
+	for ; i <= 12; i++ {
+		data.X = 12 + i
+		data.Y = i
+		data.N = i
+		var buf bytes.Buffer
+		err = binary.Write(&buf, binary.LittleEndian, data)
+		_, err = conn.Write(buf.Bytes())
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Println(data)
 	}
 }

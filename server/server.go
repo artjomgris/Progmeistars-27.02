@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/nsf/termbox-go"
 	"net"
+	"time"
 )
 
 type point struct {
@@ -15,7 +16,7 @@ type point struct {
 }
 
 func main() {
-	adr, err := net.ResolveUDPAddr("udp", "localhost:5000")
+	adr, err := net.ResolveUDPAddr("udp", "127.0.0.1:5000")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -26,7 +27,6 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	var n int32 = 0
 	ch := make(chan point)
 	var p point
 	err = termbox.Init()
@@ -37,21 +37,18 @@ func main() {
 	for {
 		go handleConnection(listener, ch)
 		p = <-ch
-		if p.N >= n {
-			termbox.Clear(termbox.ColorWhite, termbox.ColorBlack)
-			termbox.SetCell(int(p.X), int(p.Y), '*', termbox.ColorRed, termbox.ColorBlack)
-			termbox.SetCell(int(p.X-1), int(p.Y), '*', termbox.ColorGreen, termbox.ColorBlack)
-			termbox.SetCell(int(p.X+1), int(p.Y), '*', termbox.ColorGreen, termbox.ColorBlack)
-			termbox.SetCell(int(p.X), int(p.Y+1), '*', termbox.ColorGreen, termbox.ColorBlack)
-			termbox.SetCell(int(p.X), int(p.Y-1), '*', termbox.ColorGreen, termbox.ColorBlack)
-			termbox.SetCell(int(p.X+1), int(p.Y+1), '*', termbox.ColorWhite, termbox.ColorBlack)
-			termbox.SetCell(int(p.X-1), int(p.Y+1), '*', termbox.ColorWhite, termbox.ColorBlack)
-			termbox.SetCell(int(p.X+1), int(p.Y-1), '*', termbox.ColorWhite, termbox.ColorBlack)
-			termbox.SetCell(int(p.X-1), int(p.Y-1), '*', termbox.ColorWhite, termbox.ColorBlack)
-			termbox.Flush()
-			n++
-		}
-
+		termbox.Clear(termbox.ColorWhite, termbox.ColorBlack)
+		termbox.SetCell(int(p.X), int(p.Y), '*', termbox.ColorRed, termbox.ColorBlack)
+		termbox.SetCell(int(p.X-1), int(p.Y), '*', termbox.ColorGreen, termbox.ColorBlack)
+		termbox.SetCell(int(p.X+1), int(p.Y), '*', termbox.ColorGreen, termbox.ColorBlack)
+		termbox.SetCell(int(p.X), int(p.Y+1), '*', termbox.ColorGreen, termbox.ColorBlack)
+		termbox.SetCell(int(p.X), int(p.Y-1), '*', termbox.ColorGreen, termbox.ColorBlack)
+		termbox.SetCell(int(p.X+1), int(p.Y+1), '*', termbox.ColorWhite, termbox.ColorBlack)
+		termbox.SetCell(int(p.X-1), int(p.Y+1), '*', termbox.ColorWhite, termbox.ColorBlack)
+		termbox.SetCell(int(p.X+1), int(p.Y-1), '*', termbox.ColorWhite, termbox.ColorBlack)
+		termbox.SetCell(int(p.X-1), int(p.Y-1), '*', termbox.ColorWhite, termbox.ColorBlack)
+		termbox.Flush()
+		time.Sleep(1 * time.Second)
 	}
 
 }
